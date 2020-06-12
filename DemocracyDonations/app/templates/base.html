@@ -1,0 +1,25 @@
+<html>
+  <head>  
+    <title>{{ title }}</title>
+  </head>
+  <body>
+    <div>
+      <a href="/">Home</a>
+      <a href="/donations">All Donations</a>
+      <a href="/democracyDollars">Democracy Dollars</a>
+      <a href="/BlockchainData">All Blockchain Data</a>
+    </div>
+    <center><h1>{{ title }}</h1></center>
+    <hr>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+    {% for message in messages %}
+        <li>{{ message }} </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </body>
+</html>

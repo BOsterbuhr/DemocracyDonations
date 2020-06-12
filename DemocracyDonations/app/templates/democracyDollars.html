@@ -1,0 +1,51 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+	<br>
+
+	<center>
+		<h1>Democracy Donations main objective is to facilitate the adoption of Democracy Dollars by providing a transparent platform in which donors can donate to and use money from the Democracy Dollars Fund.</h1>
+		<br>
+		<blockquote>"The answer is to wash the money out with people-powered money. As someone running for president, I’ll tell you there’s the people on one side and the money on the other. The only way for us to win is we bring them together." – Andrew Yang</blockquote>
+		<br>
+
+		<br>
+		<form action="/submit" id="textform" method="post">
+			<p>Would you like to donate to the Democracy Dollars Fund or use funds to donate to a campaign?</p>
+			<input type="radio" id="DonateTo" name="fund" value="DonateTo">
+			<label for="DonateTo">Donate To Fund</label><br>
+			<input type="radio" id="DonateFrom" name="fund" value="DonateFrom">
+			<label for="DonateFrom">Donate From Fund</label><br>
+			<br>
+			<br>
+			<p>If you are using Democracy Dollars which campaign would you like them to go to?</p>
+			<input type="radio" id="HumanityForward" name="campaign" value="HumanityForward">
+			<label for="HumanityForward">Donate To Humanity Forward</label><br>
+			<input type="radio" id="Yang2024" name="campaign" value="Yang2024">
+			<label for="Yang2024">Donate To Yang2024</label><br>
+			<br>
+			<input type="number" name="donation" placeholder="$10">
+			<br>
+			<textarea name="content" rows="4" cols="50" placeholder="Add a message to your donation!"></textarea>
+			<br>
+			<input type="text" name="firstName" placeholder="Your first name">
+			<input type="text" name="lastName" placeholder="Your last name">
+			<input type="text" name="donorAddress" placeholder="101 Democracy Way">
+			<input type="text" name="donorState" placeholder="Iowa">
+			<input type="number" name="donorZip" placeholder="51106">
+			<br>
+			<input type="number" name="donorPhone" placeholder="7122126830">
+			<input type="email" name="donorEmail" placeholder="info@democracydonations.com">
+			<br>
+			<input type="submit" value="Post to Block">
+		</form>
+	</center>
+
+	<br>
+	
+
+	
+{% endblock %}
+
