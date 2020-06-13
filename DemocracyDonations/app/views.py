@@ -1,6 +1,5 @@
 import datetime
 import json
-import webbrowser
 
 import requests
 from flask import render_template, redirect, request, url_for
@@ -62,8 +61,7 @@ def landing():
 
 @app.route('/BlockchainData')
 def getChain():
-    webbrowser.open_new_tab("{}/chain".format(CONNECTED_NODE_ADDRESS))
-    return redirect("/")
+    return redirect("{}/chain".format(CONNECTED_NODE_ADDRESS))
 
 
 @app.route('/submit', methods=['POST'])
@@ -103,8 +101,7 @@ def submit_textarea():
                   json=post_object,
                   headers={'Content-type': 'application/json'})
 
-    webbrowser.open_new_tab("{}/mine".format(CONNECTED_NODE_ADDRESS))
-    return redirect("/")
+    return redirect("{}/mine".format(CONNECTED_NODE_ADDRESS))
 
 def timestamp_to_string(epoch_time):
     return datetime.datetime.fromtimestamp(epoch_time).strftime('%H:%M')
