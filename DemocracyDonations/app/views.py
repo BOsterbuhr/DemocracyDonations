@@ -62,7 +62,8 @@ def landing():
 
 @app.route('/BlockchainData')
 def getChain():
-    return redirect("{}/chain".format(CONNECTED_NODE_ADDRESS))
+    webbrowser.open_new_tab("{}/chain".format(CONNECTED_NODE_ADDRESS))
+    return redirect("/")
 
 
 @app.route('/submit', methods=['POST'])
