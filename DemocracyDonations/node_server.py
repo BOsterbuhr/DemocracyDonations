@@ -150,11 +150,11 @@ peers = set()
 @app.route('/new_transaction', methods=['POST'])
 def new_transaction():
     tx_data = request.get_json()
-    required_fields = ["firstName", "lastName", "donation"]
+    #required_fields = ["firstName", "lastName", "donation"]
 
-    for field in required_fields:
-        if not tx_data.get(field):
-            return "Invalid transaction data", 404
+    #for field in required_fields:
+     #   if not tx_data.get(field):
+      #      return "Invalid transaction data", 404
 
     tx_data["timestamp"] = time.time()
 
