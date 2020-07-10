@@ -11,6 +11,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
+
 from app import app
 
 # The node with which our application interacts, there can be multiple
@@ -81,13 +82,19 @@ class RegistrationForm(FlaskForm):
                                      validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign Up')
 
+    def validate_username(self, username):
+        fetch_posts()
+        for i in posts:
+            if username.data == i["username"]:
+                raise ValueError('That username is taken. Please choose a different one.', 'danger')
 
-class LoginForm(FlaskForm):
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember = BooleanField('Remember Me')
-    submit = SubmitField('Login')
+    def validate_email(self, email):
+        fetch_posts()
+        for i in posts:
+            if email.data == i["email"]:
+                raise ValueError('That email is taken. Please choose a different one.', 'danger')
+
+
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -117,6 +124,14 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
+class LoginForm(FlaskForm):
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember = BooleanField('Remember Me')
+    submit = SubmitField('Login')
+
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -135,6 +150,7 @@ def login():
             flash('Login Unsuccessful. Please check email and password', 'danger')    
             
     return render_template('login.html', title='Login', form=form)
+
 
 @app.route('/submit', methods=['POST'])
 def submit_textarea():

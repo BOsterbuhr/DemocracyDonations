@@ -324,4 +324,4 @@ def announce_new_block(block):
                       headers=headers)
 
 # Uncomment this line if you want to specify the port number in the code
-#app.run(host='0.0.0.0', port=8000)
+app.run(host='0.0.0.0', port=8000)
