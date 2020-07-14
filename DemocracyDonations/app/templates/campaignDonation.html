@@ -1,0 +1,135 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+	<br>
+
+	<center>
+		<h1>Democracy Donations main objective is to facilitate the adoption of Democracy Dollars by providing a transparent platform in which donors can donate to and use money from the Democracy Dollars Fund.</h1>
+		<br>
+		<blockquote>"The answer is to wash the money out with people-powered money. As someone running for president, I’ll tell you there’s the people on one side and the money on the other. The only way for us to win is we bring them together." – Andrew Yang</blockquote>
+		<br>
+	</center>
+		<br>
+		<div class="content-section">
+			<form method="POST" action="">
+				{{ form.hidden_tag() }}
+				<fieldset class="form-group">
+					<legend class="border-bottom mb-4">Donate to the Democracy Dollars Fund today!</legend>
+					<div class="form-group">
+						{{ form.post_content.label(class="form-control-label") }}
+						{% if form.post_content.errors %}
+							{{ form.post_content(class="form-control form-control-lg is-invalid") }}
+							<div class="invalid-feedback">
+								{% for error in form.post_content.errors %}
+									<span>{{ error }}</span>
+								{% endfor %}
+							</div>
+						{% else %}
+							{{ form.post_content(class="form-control form-control-lg") }}
+						{% endif %}
+					</div>
+					<div class="form-group">
+						{{ form.donorEmail.label(class="form-control-label") }}
+						{% if form.donorEmail.errors %}
+							{{ form.donorEmail(class="form-control form-control-lg is-invalid") }}
+							<div class="invalid-feedback">
+								{% for error in form.donorEmail.errors %}
+									<span>{{ error }}</span>
+								{% endfor %}
+							</div>
+						{% else %}
+							{{ form.donorEmail(class="form-control form-control-lg") }}
+						{% endif %}
+					</div>
+					<div class="form-group">
+						{{ form.firstName.label(class="form-control-label") }}
+						{% if form.firstName.errors %}
+							{{ form.firstName(class="form-control form-control-lg is-invalid") }}
+							<div class="invalid-feedback">
+								{% for error in form.firstName.errors %}
+									<span>{{ error }}</span>
+								{% endfor %}
+							</div>
+						{% else %}
+							{{ form.firstName(class="form-control form-control-lg") }}
+						{% endif %}
+					</div>
+					<div class="form-group">
+						{{ form.lastName.label(class="form-control-label") }}
+						{% if form.lastName.errors %}
+							{{ form.lastName(class="form-control form-control-lg is-invalid") }}
+							<div class="invalid-feedback">
+								{% for error in form.lastName.errors %}
+									<span>{{ error }}</span>
+								{% endfor %}
+							</div>
+						{% else %}
+							{{ form.lastName(class="form-control form-control-lg") }}
+						{% endif %}
+					</div>
+					<div class="form-group">
+						{{ form.donorAddress.label(class="form-control-label") }}
+						{% if form.donorAddress.errors %}
+							{{ form.donorAddress(class="form-control form-control-lg is-invalid") }}
+							<div class="invalid-feedback">
+								{% for error in form.donorAddress.errors %}
+									<span>{{ error }}</span>
+								{% endfor %}
+							</div>
+						{% else %}
+							{{ form.donorAddress(class="form-control form-control-lg") }}
+						{% endif %}
+					</div>
+					<div class="form-group">
+						{{ form.donorZip.label(class="form-control-label") }}
+						{% if form.donorZip.errors %}
+							{{ form.donorZip(class="form-control form-control-lg is-invalid") }}
+							<div class="invalid-feedback">
+								{% for error in form.donorZip.errors %}
+									<span>{{ error }}</span>
+								{% endfor %}
+							</div>
+						{% else %}
+							{{ form.donorZip(class="form-control form-control-lg") }}
+						{% endif %}
+					</div>
+					<div class="form-group">
+						{{ form.donorPhone.label(class="form-control-label") }}
+						{% if form.donorPhone.errors %}
+							{{ form.donorPhone(class="form-control form-control-lg is-invalid") }}
+							<div class="invalid-feedback">
+								{% for error in form.donorPhone.errors %}
+									<span>{{ error }}</span>
+								{% endfor %}
+							</div>
+						{% else %}
+							{{ form.donorPhone(class="form-control form-control-lg") }}
+						{% endif %}
+					</div>
+					<div class="form-group">
+						{{ form.donation.label(class="form-control-label") }}
+						{% if form.donation.errors %}
+							{{ form.donation(class="form-control form-control-lg is-invalid") }}
+							<div class="invalid-feedback">
+								{% for error in form.donation.errors %}
+									<span>{{ error }}</span>
+								{% endfor %}
+							</div>
+						{% else %}
+							{{ form.donation(class="form-control form-control-lg") }}
+						{% endif %}
+					</div>
+				</fieldset>
+				<div class="form-group">
+					{{ form.submit(class="btn btn-outline-info") }}
+				</div>
+			</form>
+
+	<br>
+	
+
+	
+{% endblock %}
+

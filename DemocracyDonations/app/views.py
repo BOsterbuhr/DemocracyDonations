@@ -3,14 +3,15 @@ import json
 import webbrowser
 import os
 import secrets
+import uuid
+
 
 from app import bcrypt
 import requests
 from flask import render_template, redirect, request, url_for, flash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
-
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, DecimalField, RadioField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, NumberRange
 
 from app import app
 
@@ -19,7 +20,8 @@ from app import app
 CONNECTED_NODE_ADDRESS = "http://127.0.0.1:8000"
 
 posts = []
-
+donationsList = []
+usersList = []
 
 def fetch_posts():
     """
@@ -42,6 +44,30 @@ def fetch_posts():
                        reverse=True)
 
 
+def findDonations():
+    fetch_posts()
+    donationList = []
+    for post in posts:
+        if post["id"] == "donation":
+            donationList.append(post)
+
+    global donationsList
+    donationsList = sorted(donationList, key=lambda k: k['timestamp'],
+                       reverse=True)
+
+
+def findUsers():
+    fetch_posts()
+    userList = []
+    for post in posts:
+        if post["id"] == "user":
+            userList.append(post)
+
+    global usersList
+    usersList = sorted(userList, key=lambda k: k['timestamp'],
+                       reverse=True)
+
+
 @app.route('/')
 def index():
     fetch_posts()
@@ -51,13 +77,13 @@ def index():
                            node_address=CONNECTED_NODE_ADDRESS,
                            readable_time=timestamp_to_string)
 
-@app.route('/democracyDollars')
+"""@app.route('/democracyDollars')
 def democracyDollars():
     return render_template('democracyDollars.html',
                            title='Democracy Dollars Fund: Helping everyone be heard! ',
                            node_address=CONNECTED_NODE_ADDRESS,
                            readable_time=timestamp_to_string)
-
+"""
 @app.route('/donations')
 def donations():
     fetch_posts()
@@ -93,8 +119,6 @@ class RegistrationForm(FlaskForm):
         for i in posts:
             if email.data == i["email"]:
                 raise ValueError('That email is taken. Please choose a different one.', 'danger')
-
-
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -139,11 +163,11 @@ def login():
         fetch_posts()
         try:
             for i in posts:
-                user = (i["email"] == form.email.data)
-                if user and bcrypt.check_password_hash(i["password"], form.password.data):
-                    #login_user(user, remember=form.remember.data)
-                    flash('You have been logged in!', 'success')
-                    return redirect(url_for('index'))
+                if i["id"] == "user":
+                    user = (i["email"] == form.email.data)
+                    if user and bcrypt.check_password_hash(i["password"], form.password.data):
+                        flash('You have been logged in! BUT not actually cause that is next maybe...', 'success')
+                        return redirect(url_for('index'))
         except KeyError:
             flash('Login Unsuccessful. Please check email and password.', 'danger') 
         else:
@@ -152,11 +176,60 @@ def login():
     return render_template('login.html', title='Login', form=form)
 
 
-@app.route('/submit', methods=['POST'])
+class CampaignDonationForm(FlaskForm):
+    donorEmail = StringField('Email', validators=[DataRequired(), Email()])
+    post_content = StringField('Message to the Campaign', validators=[DataRequired()])
+    firstName = StringField('First Name', validators=[DataRequired()])
+    lastName = StringField('Last Name', validators=[DataRequired()])
+    donorAddress = StringField('Donor Address', validators=[DataRequired()])
+    donorZip = StringField('Donor Zip', validators=[DataRequired()])
+    donorPhone = StringField('Donor Phone', validators=[DataRequired()])
+    donation = StringField('Donation', validators=[DataRequired()])
+    #campaign = RadioField('Select the Campaign', validators=[DataRequired()], choices=['HumanityForward', 'Yang2024'])
+    submit = SubmitField('Send Campaign Donation')
+
+
+@app.route("/campaignDonation", methods=['GET', 'POST'])
+def campaignDonation():
+    form = CampaignDonationForm()
+    if form.validate_on_submit():
+        
+
+        post_object = {
+            'id' : 'donation',
+            'post_content': form.post_content.data,
+            'firstName': form.firstName.data,
+            'lastName': form.lastName.data,
+            'donorEmail': form.donorEmail.data,
+            'donorAddress': form.donorAddress.data,
+            'donorZip': form.donorZip.data,
+            'donorPhone': form.donorPhone.data,
+            'donation': form.donation.data,
+            #'fund': fund,
+            #'campaign': campaign
+        }
+
+        # Submit a transaction
+        new_tx_address = "{}/new_transaction".format(CONNECTED_NODE_ADDRESS)
+
+
+        requests.post(new_tx_address,
+                  json=post_object,
+                  headers={'Content-type': 'application/json'})
+
+        webbrowser.open_new_tab("{}/mine".format(CONNECTED_NODE_ADDRESS))
+        flash(f'Donation sent by {form.firstName.data}!', 'success')
+        return redirect(url_for('index'))
+    return render_template('campaignDonation.html', title='Donation', form=form)
+
+
+
+
+"""@app.route('/submit', methods=['POST'])
 def submit_textarea():
-    """
+
     Endpoint to create a new transaction via our application.
-    """
+    
 
     post_content = request.form["content"]
     firstName = request.form["firstName"]
@@ -191,8 +264,8 @@ def submit_textarea():
                   json=post_object,
                   headers={'Content-type': 'application/json'})
 
-    #webbrowser.open_new_tab("{}/mine".format(CONNECTED_NODE_ADDRESS))
+    webbrowser.open_new_tab("{}/mine".format(CONNECTED_NODE_ADDRESS))
     return redirect("{}/mine".format(CONNECTED_NODE_ADDRESS))
-
+"""
 def timestamp_to_string(epoch_time):
     return datetime.datetime.fromtimestamp(epoch_time).strftime('%H:%M')

@@ -23,7 +23,7 @@
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="{{ url_for('index') }}">Home</a>
               <a class="nav-item nav-link" href="{{ url_for('donations') }}">All Donations</a>
-              <a class="nav-item nav-link" href="{{ url_for('democracyDollars') }}">Democracy Donations</a>
+              <a class="nav-item nav-link" href="{{ url_for('campaignDonation') }}">Democracy Donations</a>
               <a class="nav-item nav-link" href="{{ url_for('BlockchainData') }}">Data on the Blockchain</a>
             </div>
             <!-- Navbar Right Side -->
@@ -37,7 +37,7 @@
     </header>
     <main role="main" class="container">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
