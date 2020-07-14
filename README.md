@@ -1,10 +1,7 @@
 # DemocracyDonations
 A platform for transparent donations
 
-To run application:
+To run application, run these two commands in the terminal:
 
-export FLASK_APP=node_server.py
-
-flask run --port 8000
-
+python3 node_server.py
 python3 run_app.py
