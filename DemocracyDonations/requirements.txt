@@ -17,3 +17,4 @@ pillow>=6.2.2
 pycparser~=2.18
 six~=1.11.0
 werkzeug>=0.15.3
+email_validator~=1.1.1
