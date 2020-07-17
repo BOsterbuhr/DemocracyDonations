@@ -170,9 +170,9 @@ def register():
                   json=post_object,
                   headers={'Content-type': 'application/json'})
 
-        webbrowser.open_new_tab("{}/mine".format(CONNECTED_NODE_ADDRESS))
+        #webbrowser.open_new_tab("{}/mine".format(CONNECTED_NODE_ADDRESS))
         flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('index'))
+        return redirect("{}/mine".format(CONNECTED_NODE_ADDRESS))
     return render_template('register.html', title='Register', form=form)
 
 
@@ -224,9 +224,9 @@ def campaignDonation():
                   json=post_object,
                   headers={'Content-type': 'application/json'})
 
-        webbrowser.open_new_tab("{}/mine".format(CONNECTED_NODE_ADDRESS))
+        #webbrowser.open_new_tab("{}/mine".format(CONNECTED_NODE_ADDRESS))
         flash(f'Donation sent by {form.firstName.data}!', 'success')
-        return redirect(url_for('index'))
+        return redirect("{}/mine".format(CONNECTED_NODE_ADDRESS))
     return render_template('campaignDonation.html', title='Donation', form=form)
 
 
