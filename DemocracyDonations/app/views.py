@@ -67,36 +67,35 @@ def findUsers():
     usersList = sorted(userList, key=lambda k: k['timestamp'],
                        reverse=True)
 
+def totalDonations():
+    findDonations()
+    Donations = []
+    for d in donationsList:
+        Donations.append(float(d["donation"]))
+    totalDonations = sum(Donations)
+    print(totalDonations)
 
-@app.route('/')
-def index():
-    fetch_posts()
-    return render_template('index.html',
-                           title='Democracy Donations: Transparent politics',
-                           posts=posts,
-                           node_address=CONNECTED_NODE_ADDRESS,
-                           readable_time=timestamp_to_string)
 
-"""@app.route('/democracyDollars')
-def democracyDollars():
-    return render_template('democracyDollars.html',
-                           title='Democracy Dollars Fund: Helping everyone be heard! ',
-                           node_address=CONNECTED_NODE_ADDRESS,
-                           readable_time=timestamp_to_string)
-"""
-@app.route('/donations')
-def donations():
-    fetch_posts()
-    return render_template('donations.html',
-                           title='All donations made to Democracy Dollars',
-                           posts=posts,
-                           node_address=CONNECTED_NODE_ADDRESS,
-                           readable_time=timestamp_to_string )
 
-@app.route('/BlockchainData')
-def BlockchainData():
-    #webbrowser.open_new_tab("{}/chain".format(CONNECTED_NODE_ADDRESS))
-    return redirect("{}/chain".format(CONNECTED_NODE_ADDRESS))
+class LoginForm(FlaskForm):
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember = BooleanField('Remember Me')
+    submit = SubmitField('Login')
+
+
+class CampaignDonationForm(FlaskForm):
+    donorEmail = StringField('Email', validators=[DataRequired(), Email()])
+    post_content = StringField('Message to the Campaign', validators=[DataRequired()])
+    firstName = StringField('First Name', validators=[DataRequired()])
+    lastName = StringField('Last Name', validators=[DataRequired()])
+    donorAddress = StringField('Donor Address', validators=[DataRequired()])
+    donorZip = StringField('Donor Zip', validators=[DataRequired()])
+    donorPhone = StringField('Donor Phone', validators=[DataRequired()])
+    donation = StringField('Donation', validators=[DataRequired()])
+    submit = SubmitField('Send Campaign Donation')
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',
@@ -111,14 +110,43 @@ class RegistrationForm(FlaskForm):
     def validate_username(self, username):
         fetch_posts()
         for i in posts:
-            if username.data == i["username"]:
-                raise ValueError('That username is taken. Please choose a different one.', 'danger')
-
+            try:
+                if username.data == i["username"]:
+                    raise ValueError('That username is taken. Please choose a different one.', 'danger')
+            except:
+                break
     def validate_email(self, email):
         fetch_posts()
         for i in posts:
-            if email.data == i["email"]:
-                raise ValueError('That email is taken. Please choose a different one.', 'danger')
+            try:
+                if email.data == i["email"]:
+                    raise ValueError('That email is taken. Please choose a different one.', 'danger')
+            except:
+                break
+
+@app.route('/')
+def index():
+    fetch_posts()
+    return render_template('index.html',
+                           title='Democracy Donations: Transparent politics',
+                           posts=posts,
+                           node_address=CONNECTED_NODE_ADDRESS,
+                           readable_time=timestamp_to_string)
+
+
+@app.route('/donations')
+def donations():
+    fetch_posts()
+    return render_template('donations.html',
+                           title='All donations made to Democracy Dollars',
+                           posts=posts,
+                           node_address=CONNECTED_NODE_ADDRESS,
+                           readable_time=timestamp_to_string )
+
+@app.route('/BlockchainData')
+def BlockchainData():
+    #webbrowser.open_new_tab("{}/chain".format(CONNECTED_NODE_ADDRESS))
+    return redirect("{}/chain".format(CONNECTED_NODE_ADDRESS))
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -148,14 +176,6 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-class LoginForm(FlaskForm):
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember = BooleanField('Remember Me')
-    submit = SubmitField('Login')
-
-
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -174,19 +194,6 @@ def login():
             flash('Login Unsuccessful. Please check email and password', 'danger')    
             
     return render_template('login.html', title='Login', form=form)
-
-
-class CampaignDonationForm(FlaskForm):
-    donorEmail = StringField('Email', validators=[DataRequired(), Email()])
-    post_content = StringField('Message to the Campaign', validators=[DataRequired()])
-    firstName = StringField('First Name', validators=[DataRequired()])
-    lastName = StringField('Last Name', validators=[DataRequired()])
-    donorAddress = StringField('Donor Address', validators=[DataRequired()])
-    donorZip = StringField('Donor Zip', validators=[DataRequired()])
-    donorPhone = StringField('Donor Phone', validators=[DataRequired()])
-    donation = StringField('Donation', validators=[DataRequired()])
-    #campaign = RadioField('Select the Campaign', validators=[DataRequired()], choices=['HumanityForward', 'Yang2024'])
-    submit = SubmitField('Send Campaign Donation')
 
 
 @app.route("/campaignDonation", methods=['GET', 'POST'])
@@ -223,49 +230,5 @@ def campaignDonation():
     return render_template('campaignDonation.html', title='Donation', form=form)
 
 
-
-
-"""@app.route('/submit', methods=['POST'])
-def submit_textarea():
-
-    Endpoint to create a new transaction via our application.
-    
-
-    post_content = request.form["content"]
-    firstName = request.form["firstName"]
-    lastName = request.form["lastName"]
-    donorEmail = request.form["donorEmail"]
-    donorAddress = request.form["donorAddress"]
-    donorZip = request.form["donorZip"]
-    donorPhone = request.form["donorPhone"]
-    donation = request.form["donation"]
-    fund = request.form["fund"]
-    campaign = request.form["campaign"]
-    
-
-    post_object = {
-        'id' : 'donation',
-        'content': post_content,
-        'firstName': firstName,
-        'lastName': lastName,
-        'donorEmail': donorEmail,
-        'donorAddress': donorAddress,
-        'donorZip': donorZip,
-        'donorPhone': donorPhone,
-        'donation': donation,
-        'fund': fund,
-        'campaign': campaign
-    }
-
-    # Submit a transaction
-    new_tx_address = "{}/new_transaction".format(CONNECTED_NODE_ADDRESS)
-
-    requests.post(new_tx_address,
-                  json=post_object,
-                  headers={'Content-type': 'application/json'})
-
-    webbrowser.open_new_tab("{}/mine".format(CONNECTED_NODE_ADDRESS))
-    return redirect("{}/mine".format(CONNECTED_NODE_ADDRESS))
-"""
 def timestamp_to_string(epoch_time):
     return datetime.datetime.fromtimestamp(epoch_time).strftime('%H:%M')
