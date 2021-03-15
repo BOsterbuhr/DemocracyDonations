@@ -8,3 +8,5 @@ python3 run_app.py
 
 
 The idea is to have a donation platform built using a blockchain. 
+
+# Will revisit in first half of 2021.
